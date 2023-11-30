@@ -13,9 +13,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var introduceLabel: UILabel!
     @IBOutlet weak var numSelectedLabel: UILabel!
     
-    var comSelectedNumebr = Int.random(in: 1...10)
-    var numString: String?
-    
+    var upDownManager = UpDownManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,39 +27,28 @@ class ViewController: UIViewController {
     func makeUI() {
         introduceLabel.text = "선택하세요"
         numSelectedLabel.text = ""
-        comSelectedNumebr = Int.random(in: 1...10)
-        
     }
     
     
     @IBAction func numButtonTapped(_ sender: UIButton) {
-        numString = sender.currentTitle!
-        
-        
+        guard let numString = sender.currentTitle else { return }
         numSelectedLabel.text = numString
         
+        guard let num = Int(numString) else { return }
+        upDownManager.setUsersNum(num: num)
         
     }
     
     @IBAction func resetButtonTapped(_ sender: UIButton) {
-        
         makeUI()
+        upDownManager.resetNum()
     }
     
     @IBAction func selectButtonTapped(_ sender: UIButton) {
         
-        guard let mySelectedNum = Int(numString!) else {
-            introduceLabel.text = "선택되지 않았습니다"
-            return
-        }
         
-        if comSelectedNumebr > mySelectedNum {
-            introduceLabel.text = "UP"
-        } else if comSelectedNumebr < mySelectedNum {
-            introduceLabel.text = "DOWN"
-        } else {
-            introduceLabel.text = "BINGO🥳"
-        }
+        introduceLabel.text = upDownManager.getUpDownResult()
+        
     }
     
 
